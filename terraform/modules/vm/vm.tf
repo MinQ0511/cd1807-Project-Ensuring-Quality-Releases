@@ -1,20 +1,20 @@
 resource "azurerm_network_interface" "nic" {
-  name                = "${var.prefix}-nic"
+  name                = "myNIC"
   location            = "${var.location}"
-  resource_group_name = "${var.resource_group_name}"
+  resource_group_name = "${var.resource_group}"
 
   ip_configuration {
     name                          = "internal"
-    subnet_id                     = "${module.network.subnet_id_test}"
+    subnet_id                     = "${var.subnet_id}"
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = "${module.publicip.public_ip_address_id}"
+    public_ip_address_id          = "${var.public_ip_address_id}"
   }
 }
 
-resource "azurerm_linux_virtual_machine" "" {
+resource "azurerm_linux_virtual_machine" "main" {
   name                = "myVM"
   location            = "${var.location}"
-  resource_group_name = "${var.resource_group_name}"
+  resource_group_name = "${var.resource_group}"
   size                = "Standard_D2s_v3"
   admin_username      = "adminuser"
   network_interface_ids = [azurerm_network_interface.nic.id]
